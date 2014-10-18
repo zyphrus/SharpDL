@@ -11,7 +11,7 @@
     <AssemblyName>SharpDL.Events</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -61,12 +61,6 @@
     <Compile Include="WindowEventArgs.cs" />
     <Compile Include="WindowEventType.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SharpDL.Input\SharpDL.Input.csproj">
-      <Project>{91ebb67f-91dc-4721-a62e-02b39f821062}</Project>
-      <Name>SharpDL.Input</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -75,4 +69,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\SharpDL.Input\SharpDL.Input.csproj">
+      <Project>{91EBB67F-91DC-4721-A62E-02B39F821062}</Project>
+      <Name>SharpDL.Input</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

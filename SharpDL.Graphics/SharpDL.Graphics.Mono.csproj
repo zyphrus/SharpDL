@@ -10,7 +10,7 @@
     <RootNamespace>SharpDL.Graphics</RootNamespace>
     <AssemblyName>SharpDL.Graphics</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -54,9 +54,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="SDL2#">
-      <HintPath>..\Libs\SDL2#.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\Libs\log4net.dll</HintPath>
     </Reference>
@@ -78,6 +75,13 @@
     <Compile Include="SurfaceType.cs" />
     <Compile Include="ImageFormat.cs" />
     <Compile Include="Primitive.cs" />
+    <Compile Include="ITexture.cs" />
+    <Compile Include="RendererFlags.cs" />
+    <Compile Include="RenderTarget.cs" />
+    <Compile Include="BlendMode.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="TextureAccessMode.cs" />
+    <Compile Include="WindowFlags.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -91,6 +95,14 @@
     <ProjectReference Include="..\SharpDL.Events\SharpDL.Events.Mono.csproj">
       <Project>{CBAC74B4-D9CD-4E22-AFC8-C9553423A6C5}</Project>
       <Name>SharpDL.Events.Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SDL2-CS\SDL2-CS.csproj">
+      <Project>{85480198-8711-4355-830E-72FD794AD3F6}</Project>
+      <Name>SDL2-CS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpDL.Shared\SharpDL.Shared.csproj">
+      <Project>{02E40AF5-4608-4A26-9B4A-27EECE8AEA61}</Project>
+      <Name>SharpDL.Shared</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

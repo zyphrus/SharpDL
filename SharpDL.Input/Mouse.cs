@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using SDL2;
+﻿using SDL2;
 using System.Collections.Generic;
 using System;
 using SharpDL.Shared;
@@ -66,17 +65,16 @@ namespace SharpDL.Input
 		public static void ShowCursor()
 		{
 			int result = SDL.SDL_ShowCursor(SDL.SDL_ENABLE);
-            if (Utilities.IsError(result))
-            {
-                throw new InvalidOperationException(Utilities.GetErrorMessage("SDL_ShowCursor"));
-            }
+			if (Utilities.IsError(result)) {
+				throw new InvalidOperationException(Utilities.GetErrorMessage("SDL_ShowCursor"));
+			}
 		}
 
 		public static void HideCursor()
 		{
 			int result = SDL.SDL_ShowCursor(SDL.SDL_DISABLE);
 			if (Utilities.IsError(result))
-                throw new InvalidOperationException(Utilities.GetErrorMessage("SDL_HideCursor"));
+				throw new InvalidOperationException(Utilities.GetErrorMessage("SDL_HideCursor"));
 		}
 	}
 }

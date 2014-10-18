@@ -10,7 +10,7 @@
     <RootNamespace>SharpDL.Input</RootNamespace>
     <AssemblyName>SharpDL.Input</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -54,9 +54,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="SDL2#">
-      <HintPath>..\Libs\SDL2#.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KeyInformation.cs" />
@@ -79,4 +76,14 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\SDL2-CS\SDL2-CS.csproj">
+      <Project>{85480198-8711-4355-830E-72FD794AD3F6}</Project>
+      <Name>SDL2-CS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpDL.Shared\SharpDL.Shared.csproj">
+      <Project>{02E40AF5-4608-4A26-9B4A-27EECE8AEA61}</Project>
+      <Name>SharpDL.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
