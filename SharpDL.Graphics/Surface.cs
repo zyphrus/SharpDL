@@ -31,7 +31,6 @@ namespace SharpDL.Graphics
 
             FilePath = filePath;
             Type = surfaceType;
-
             if (surfaceType == SurfaceType.BMP)
             {
                 Handle = SDL.SDL_LoadBMP(FilePath);

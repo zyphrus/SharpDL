@@ -2,12 +2,13 @@
 using SharpDL.Shared;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace SharpDL.Graphics
 {
     public class Renderer : IDisposable
     {
+        #region Feilds and Constructor
+
         //private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private List<RendererFlags> flags = new List<RendererFlags>();
@@ -30,7 +31,7 @@ namespace SharpDL.Graphics
             Window = window;
             Index = index;
 
-            List<RendererFlags> copyFlags = new List<RendererFlags>();
+            var copyFlags = new List<RendererFlags>();
             foreach (RendererFlags flag in Enum.GetValues(typeof(RendererFlags)))
             {
                 if (flags.HasFlag(flag))
@@ -46,6 +47,10 @@ namespace SharpDL.Graphics
             }
         }
 
+        #endregion
+
+        #region Render Functions
+
         public void ClearScreen()
         {
             ThrowExceptionIfRendererIsNull();
@@ -57,17 +62,19 @@ namespace SharpDL.Graphics
             }
         }
 
+
+
         internal void RenderTexture(IntPtr textureHandle, float positionX, float positionY, int sourceWidth, int sourceHeight, double angle, Vector center)
         {
-            if(textureHandle == IntPtr.Zero)
+            if (textureHandle == IntPtr.Zero)
             {
                 throw new ArgumentNullException("textureHandle", Errors.E_TEXTURE_NULL);
             }
 
             // SDL only accepts integer positions (x,y) in the rendering Rect
-            SDL.SDL_Rect destinationRectangle = new SDL.SDL_Rect() { x = (int)positionX, y = (int)positionY, w = sourceWidth, h = sourceHeight };
-            SDL.SDL_Rect sourceRectangle = new SDL.SDL_Rect() { x = 0, y = 0, w = sourceWidth, h = sourceHeight };
-            SDL.SDL_Point centerPoint = new SDL.SDL_Point() { x = (int)center.X, y = (int)center.Y };
+            var destinationRectangle = new SDL.SDL_Rect() { x = (int)positionX, y = (int)positionY, w = sourceWidth, h = sourceHeight };
+            var sourceRectangle = new SDL.SDL_Rect() { x = 0, y = 0, w = sourceWidth, h = sourceHeight };
+            var centerPoint = new SDL.SDL_Point() { x = (int)center.X, y = (int)center.Y };
 
             int result = SDL.SDL_RenderCopyEx(Handle, textureHandle, ref sourceRectangle, ref destinationRectangle, angle, ref centerPoint, SDL.SDL_RendererFlip.SDL_FLIP_NONE);
             if (Utilities.IsError(result))
@@ -78,7 +85,7 @@ namespace SharpDL.Graphics
 
         internal void RenderTexture(IntPtr textureHandle, float positionX, float positionY, int sourceWidth, int sourceHeight)
         {
-            Rectangle source = new Rectangle(0, 0, sourceWidth, sourceHeight);
+            var source = new Rectangle(0, 0, sourceWidth, sourceHeight);
             RenderTexture(textureHandle, positionX, positionY, source);
         }
 
@@ -93,13 +100,76 @@ namespace SharpDL.Graphics
             int height = source.Height;
 
             // SDL only accepts integer positions (x,y) in the rendering Rect
-            SDL.SDL_Rect destinationRectangle = new SDL.SDL_Rect() { x = (int)positionX, y = (int)positionY, w = width, h = height };
-            SDL.SDL_Rect sourceRectangle = new SDL.SDL_Rect() { x = source.X, y = source.Y, w = width, h = height };
+            var destinationRectangle = new SDL.SDL_Rect() { x = (int)positionX, y = (int)positionY, w = width, h = height };
+            var sourceRectangle = new SDL.SDL_Rect() { x = source.X, y = source.Y, w = width, h = height };
 
             int result = SDL.SDL_RenderCopy(Handle, textureHandle, ref sourceRectangle, ref destinationRectangle);
             if (Utilities.IsError(result))
             {
                 throw new InvalidOperationException(Utilities.GetErrorMessage("SDL_RenderCopy"));
+            }
+        }
+
+        public void RenderTexture(Texture texture, Vector position, Rectangle? source, double angle, Vector center)
+        {
+            RenderTexture(texture.Handle, position.X, position.Y, (source != null ? source.Value.Width : texture.Width)
+                , (source != null ? source.Value.Height : texture.Height), angle, center);
+        }
+
+        public void RenderTexture(Texture texture, Point position, Rectangle? source, double angle, Vector center)
+        {
+
+
+            RenderTexture(texture.Handle, position.X, position.Y, (source != null ? source.Value.Width : texture.Width)
+                , (source != null ? source.Value.Height : texture.Height), angle, center);
+        }
+
+        public void RenderPoint(Point point)
+        {
+            RenderPoint(point.X, point.Y);
+        }
+
+        public void RenderPoint(int x, int y)
+        {
+            ThrowExceptionIfRendererIsNull();
+
+            int result = SDL.SDL_RenderDrawPoint(Handle, x, y);
+            if (Utilities.IsError(result))
+            {
+                throw new InvalidOperationException(); //TODO: Proper error
+            }
+        }
+
+        public void RenderRect(Rectangle rect)
+        {
+            ThrowExceptionIfRendererIsNull();
+
+            var sdlRect = rect.ToSDLRect();
+            int result = SDL.SDL_RenderDrawRect(Handle, ref sdlRect);
+            if (Utilities.IsError(result))
+            {
+                throw new InvalidOperationException(); //TODO: Proper error
+            }
+        }
+
+        public void RenderRect(int x, int y, int w, int h)
+        {
+            RenderRect(new Rectangle(x, y, w, h));
+        }
+
+        public void RenderLine(Point a, Point b)
+        {
+            RenderLine(a.X, a.Y, b.X, b.Y);
+        }
+
+        public void RenderLine(int x1, int y1, int x2, int y2)
+        {
+            ThrowExceptionIfRendererIsNull();
+
+            int result = SDL.SDL_RenderDrawLine(Handle, x1, y1, x2, y2);
+            if (Utilities.IsError(result))
+            {
+                throw new InvalidOperationException(); //TODO: Proper error
             }
         }
 
@@ -109,6 +179,10 @@ namespace SharpDL.Graphics
 
             SDL.SDL_RenderPresent(Handle);
         }
+
+        #endregion
+
+        #region Settings
 
         public void ResetRenderTarget()
         {
@@ -130,7 +204,7 @@ namespace SharpDL.Graphics
                 throw new InvalidOperationException(Errors.E_RENDERER_NO_RENDER_TARGET_SUPPORT);
             }
 
-            int result = SDL2.SDL.SDL_SetRenderTarget(Handle, renderTarget.Handle);
+            int result = SDL.SDL_SetRenderTarget(Handle, renderTarget.Handle);
             if (Utilities.IsError(result))
             {
                 throw new InvalidOperationException(Utilities.GetErrorMessage("SDL_SetRenderTarget"));
@@ -139,11 +213,21 @@ namespace SharpDL.Graphics
 
         public void SetBlendMode(BlendMode blendMode)
         {
-            int result = SDL2.SDL.SDL_SetRenderDrawBlendMode(Handle, (SDL2.SDL.SDL_BlendMode)blendMode);
+            int result = SDL.SDL_SetRenderDrawBlendMode(Handle, (SDL.SDL_BlendMode)blendMode);
             if (Utilities.IsError(result))
             {
                 throw new InvalidOperationException(Utilities.GetErrorMessage("SDL_SetDrawBlendMode"));
             }
+        }
+
+        public void SetDrawColor(Color color)
+        {
+            SetDrawColor(color.R, color.G, color.B, 255);
+        }
+
+        public void SetDrawColor(Color color, byte a)
+        {
+            SetDrawColor(color.R, color.G, color.B, a);
         }
 
         public void SetDrawColor(byte r, byte g, byte b, byte a)
@@ -162,20 +246,26 @@ namespace SharpDL.Graphics
         {
             ThrowExceptionIfRendererIsNull();
 
-            int result = SDL2.SDL.SDL_RenderSetLogicalSize(Handle, width, height);
+            int result = SDL.SDL_RenderSetLogicalSize(Handle, width, height);
             if (Utilities.IsError(result))
             {
                 throw new InvalidOperationException(Utilities.GetErrorMessage("SDL_RenderSetLogicalSize"));
             }
         }
 
+        #endregion
+
+        #region Dispose & Other
+
         private void ThrowExceptionIfRendererIsNull()
         {
-            if(Handle == IntPtr.Zero)
+            if (Handle == IntPtr.Zero)
             {
                 throw new InvalidOperationException(Errors.E_RENDERER_NULL);
             }
         }
+
+
 
         public void Dispose()
         {
@@ -196,5 +286,7 @@ namespace SharpDL.Graphics
                 Handle = IntPtr.Zero;
             }
         }
+
+        #endregion
     }
 }

@@ -181,37 +181,55 @@ namespace SharpDL
         {
             if (rawEvent.type == SDL.SDL_EventType.SDL_FIRSTEVENT)
                 return;
-            else if (rawEvent.type == SDL.SDL_EventType.SDL_WINDOWEVENT)
+
+            if (rawEvent.type == SDL.SDL_EventType.SDL_WINDOWEVENT)
             {
                 WindowEventArgs eventArgs = GameEventArgsFactory<WindowEventArgs>.Create(rawEvent);
-                if (eventArgs.SubEventType == WindowEventType.Close)
-                    RaiseEvent<WindowEventArgs>(WindowClosed, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Enter)
-                    RaiseEvent<WindowEventArgs>(WindowEntered, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Exposed)
-                    RaiseEvent<WindowEventArgs>(WindowExposed, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.FocusGained)
-                    RaiseEvent<WindowEventArgs>(WindowFocusGained, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.FocusLost)
-                    RaiseEvent<WindowEventArgs>(WindowFocusLost, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Hidden)
-                    RaiseEvent<WindowEventArgs>(WindowHidden, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Leave)
-                    RaiseEvent<WindowEventArgs>(WindowLeave, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Maximized)
-                    RaiseEvent<WindowEventArgs>(WindowMaximized, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Minimized)
-                    RaiseEvent<WindowEventArgs>(WindowMinimized, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Moved)
-                    RaiseEvent<WindowEventArgs>(WindowMoved, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Resized)
-                    RaiseEvent<WindowEventArgs>(WindowResized, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Restored)
-                    RaiseEvent<WindowEventArgs>(WindowRestored, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.Shown)
-                    RaiseEvent<WindowEventArgs>(WindowShown, eventArgs);
-                else if (eventArgs.SubEventType == WindowEventType.SizeChanged)
-                    RaiseEvent<WindowEventArgs>(WindowSizeChanged, eventArgs);
+                switch (eventArgs.SubEventType)
+                {
+                    case WindowEventType.Close:
+                        RaiseEvent<WindowEventArgs>(WindowClosed, eventArgs);
+                        break;
+                    case WindowEventType.Enter:
+                        RaiseEvent<WindowEventArgs>(WindowEntered, eventArgs);
+                        break;
+                    case WindowEventType.Exposed:
+                        RaiseEvent<WindowEventArgs>(WindowExposed, eventArgs);
+                        break;
+                    case WindowEventType.FocusGained:
+                        RaiseEvent<WindowEventArgs>(WindowFocusGained, eventArgs);
+                        break;
+                    case WindowEventType.FocusLost:
+                        RaiseEvent<WindowEventArgs>(WindowFocusLost, eventArgs);
+                        break;
+                    case WindowEventType.Hidden:
+                        RaiseEvent<WindowEventArgs>(WindowHidden, eventArgs);
+                        break;
+                    case WindowEventType.Leave:
+                        RaiseEvent<WindowEventArgs>(WindowLeave, eventArgs);
+                        break;
+                    case WindowEventType.Maximized:
+                        RaiseEvent<WindowEventArgs>(WindowMaximized, eventArgs);
+                        break;
+                    case WindowEventType.Minimized:
+                        RaiseEvent<WindowEventArgs>(WindowMinimized, eventArgs);
+                        break;
+                    case WindowEventType.Moved:
+                        RaiseEvent<WindowEventArgs>(WindowMoved, eventArgs);
+                        break;
+                    case WindowEventType.Resized:
+                        RaiseEvent<WindowEventArgs>(WindowResized, eventArgs);
+                        break;
+                    case WindowEventType.Restored:
+                        RaiseEvent<WindowEventArgs>(WindowRestored, eventArgs);
+                        break;
+                    case WindowEventType.Shown:
+                        RaiseEvent<WindowEventArgs>(WindowShown, eventArgs);
+                        break;
+                    case WindowEventType.SizeChanged:
+                        RaiseEvent<WindowEventArgs>(WindowSizeChanged, eventArgs);
+                        break;
+                }
             }
             else if (rawEvent.type == SDL.SDL_EventType.SDL_QUIT)
             {
@@ -224,7 +242,7 @@ namespace SharpDL
                 RaiseEvent<VideoDeviceSystemEventArgs>(VideoDeviceSystemEvent, eventArgs);
             }
             else if (rawEvent.type == SDL.SDL_EventType.SDL_KEYDOWN
-                || rawEvent.type == SDL.SDL_EventType.SDL_KEYUP)
+                     || rawEvent.type == SDL.SDL_EventType.SDL_KEYUP)
             {
                 KeyboardEventArgs eventArgs = GameEventArgsFactory<KeyboardEventArgs>.Create(rawEvent);
                 if (eventArgs.State == KeyState.Pressed)
@@ -249,7 +267,7 @@ namespace SharpDL
                 RaiseEvent<MouseMotionEventArgs>(MouseMoving, eventArgs);
             }
             else if (rawEvent.type == SDL.SDL_EventType.SDL_MOUSEBUTTONUP
-                || rawEvent.type == SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN)
+                     || rawEvent.type == SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN)
             {
                 MouseButtonEventArgs eventArgs = GameEventArgsFactory<MouseButtonEventArgs>.Create(rawEvent);
 

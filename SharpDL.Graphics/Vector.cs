@@ -1,10 +1,12 @@
-﻿namespace SharpDL.Graphics
+﻿using SDL2;
+
+namespace SharpDL.Graphics
 {
     public struct Vector
     {
-        public float X { get; private set; }
+        public float X { get; set; }
 
-        public float Y { get; private set; }
+        public float Y { get; set; }
 
         public static Vector One { get { return new Vector() { X = 1, Y = 1 }; } }
 
@@ -61,18 +63,24 @@
             if (obj is Vector)
             {
                 var o = (Vector)obj;
-                if (this.X == o.X && this.Y == o.Y)
+                if (X == o.X && Y == o.Y)
                     return true;
-                else
-                    return false;
+                return false;
             }
-            else
-                return base.Equals(obj);
+            return base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return (int)(Y * 5f + X * 31f % int.MaxValue);
+        }
+
+        public SDL.SDL_Point ToSDLPoint()
+        {
+            var pt = new SDL.SDL_Point();
+            pt.x = (int)X;
+            pt.y = (int)Y;
+            return pt;
         }
     }
 }

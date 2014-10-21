@@ -1,16 +1,17 @@
 ﻿using System;
+using SDL2;
 
 namespace SharpDL.Graphics
 {
     public struct Rectangle
     {
-        public int X { get; private set; }
+        public int X { get; set; }
 
-        public int Y { get; private set; }
+        public int Y { get; set; }
 
-        public int Width { get; private set; }
+        public int Width { get; set; }
 
-        public int Height { get; private set; }
+        public int Height { get; set; }
 
         public int Bottom { get { return Y + Height; } }
 
@@ -38,10 +39,7 @@ namespace SharpDL.Graphics
         {
             get
             {
-                if (Width == 0 && Height == 0)
-                    return true;
-                else
-                    return false;
+                return Width == 0 && Height == 0;
             }
         }
 
@@ -51,7 +49,7 @@ namespace SharpDL.Graphics
         {
             get
             {
-                return new Point(this.X + (this.Width / 2), this.Y + (this.Height / 2));
+                return new Point(X + (Width / 2), Y + (Height / 2));
             }
         }
 
@@ -64,28 +62,35 @@ namespace SharpDL.Graphics
             Height = height;
         }
 
+        public SDL.SDL_Rect ToSDLRect()
+        {
+            var rect = new SDL.SDL_Rect();
+            rect.w = Width;
+            rect.h = Height;
+            rect.x = X;
+            rect.y = Y;
+            return rect;
+        }
+
         public bool Contains(Point point)
         {
             if (Left <= point.X && Right >= point.X && Top <= point.Y && Bottom >= point.Y)
                 return true;
-            else
-                return false;
+            return false;
         }
 
         public bool Contains(Rectangle rectangle)
         {
             if (Left <= rectangle.Left && Right >= rectangle.Right && Top <= rectangle.Top && Bottom >= rectangle.Bottom)
                 return true;
-            else
-                return false;
+            return false;
         }
 
         public bool Contains(Vector vector)
         {
             if (Left <= vector.X && Right >= vector.X && Top <= vector.Y && Bottom >= vector.Y)
                 return true;
-            else
-                return false;
+            return false;
         }
 
         /// <summary>
@@ -100,14 +105,14 @@ namespace SharpDL.Graphics
         public Vector GetIntersectionDepth(Rectangle rectangle)
         {
             // Calculate half sizes.
-            float halfWidthA = this.Width / 2.0f;
-            float halfHeightA = this.Height / 2.0f;
+            float halfWidthA = Width / 2.0f;
+            float halfHeightA = Height / 2.0f;
             float halfWidthB = rectangle.Width / 2.0f;
             float halfHeightB = rectangle.Height / 2.0f;
 
             // Calculate centers.
-            Vector centerA = new Vector(this.Left + halfWidthA, this.Top + halfHeightA);
-            Vector centerB = new Vector(rectangle.Left + halfWidthB, rectangle.Top + halfHeightB);
+            var centerA = new Vector(Left + halfWidthA, Top + halfHeightA);
+            var centerB = new Vector(rectangle.Left + halfWidthB, rectangle.Top + halfHeightB);
 
             // Calculate current and minimum-non-intersecting distances between centers.
             float distanceX = centerA.X - centerB.X;
@@ -123,6 +128,31 @@ namespace SharpDL.Graphics
             float depthX = distanceX > 0 ? minDistanceX - distanceX : -minDistanceX - distanceX;
             float depthY = distanceY > 0 ? minDistanceY - distanceY : -minDistanceY - distanceY;
             return new Vector(depthX, depthY);
+        }
+
+        public static Rectangle Union(Rectangle rect1, Rectangle rect2)
+        {
+            int x = Math.Min(rect1.X, rect2.X);
+            int y = Math.Min(rect1.Y, rect2.Y);
+
+            int w = x - Math.Max(rect1.Left, rect2.Left);
+            int h = y - Math.Max(rect1.Bottom, rect2.Bottom);
+
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle Intersect(Rectangle a, Rectangle b)
+        {
+            if (!a.Intersects(b))
+                return Empty;
+
+            int x = Math.Max(a.X, b.X);
+            int y = Math.Max(a.Y, b.Y);
+
+            int w = x - Math.Max(a.Left, b.Left);
+            int h = y - Math.Max(a.Bottom, b.Bottom);
+
+            return new Rectangle(x, y, w, h);
         }
     }
 }

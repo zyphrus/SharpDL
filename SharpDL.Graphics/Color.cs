@@ -28,5 +28,13 @@ namespace SharpDL.Graphics
             G = (byte)Convert.ToInt32(g, 16);
             B = (byte)Convert.ToInt32(b, 16);
         }
+
+        public Color(int color)
+            : this()
+        {
+            R = (byte)(color >> 16 % 256);
+            G = (byte)(color >> 8 % 256);
+            B = (byte)(color % 256);
+        }
     }
 }

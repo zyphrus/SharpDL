@@ -1,6 +1,8 @@
 ﻿using SDL2;
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
+using SharpDL.Shared;
 
 namespace SharpDL.Graphics
 {
@@ -8,7 +10,24 @@ namespace SharpDL.Graphics
     {
         //private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public string Title { get; private set; }
+        public string Title
+        {
+            get
+            {
+                if (Handle != IntPtr.Zero)
+                {
+                    return SDL.SDL_GetWindowTitle(Handle);
+                }
+                throw new InvalidOperationException(Errors.E_WINDOW_NULL);
+            }
+            set
+            {
+                if (Handle != IntPtr.Zero)
+                    SDL.SDL_SetWindowTitle(Handle, value);
+                else
+                    throw new InvalidOperationException(Errors.E_WINDOW_NULL);
+            }
+        }
 
         public int X { get; private set; }
 
@@ -29,7 +48,6 @@ namespace SharpDL.Graphics
                 title = "SharpDL Window";
             }
 
-            Title = title;
             X = x;
             Y = y;
             Width = width;
@@ -42,7 +60,7 @@ namespace SharpDL.Graphics
 
             Flags = copyFlags;
 
-            Handle = SDL.SDL_CreateWindow(this.Title, this.X, this.Y, this.Width, this.Height, (SDL.SDL_WindowFlags)flags);
+            Handle = SDL.SDL_CreateWindow(title, X, Y, Width, Height, (SDL.SDL_WindowFlags)flags);
             if (Handle == IntPtr.Zero)
             {
                 throw new InvalidOperationException(String.Format("SDL_CreateWindow: {0}", SDL.SDL_GetError()));
