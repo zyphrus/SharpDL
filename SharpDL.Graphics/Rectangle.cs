@@ -3,7 +3,7 @@ using SDL2;
 
 namespace SharpDL.Graphics
 {
-    public struct Rectangle
+    public struct Rectangle : IEquatable<Rectangle>
     {
         public int X { get; set; }
 
@@ -39,9 +39,11 @@ namespace SharpDL.Graphics
         {
             get
             {
-                return Width == 0 && Height == 0;
+                return Width == 0 && Height == 0 && X == 0 && Y == 0;
             }
         }
+
+        public int Area { get { return Width * Height; } }
 
         public Point Location { get { return new Point(X, Y); } }
 
@@ -135,8 +137,8 @@ namespace SharpDL.Graphics
             int x = Math.Min(rect1.X, rect2.X);
             int y = Math.Min(rect1.Y, rect2.Y);
 
-            int w = x - Math.Max(rect1.Left, rect2.Left);
-            int h = y - Math.Max(rect1.Bottom, rect2.Bottom);
+            int w = Math.Max(rect1.Right, rect2.Right) - x;
+            int h = Math.Max(rect1.Bottom, rect2.Bottom) - y;
 
             return new Rectangle(x, y, w, h);
         }
@@ -149,10 +151,36 @@ namespace SharpDL.Graphics
             int x = Math.Max(a.X, b.X);
             int y = Math.Max(a.Y, b.Y);
 
-            int w = x - Math.Max(a.Left, b.Left);
-            int h = y - Math.Max(a.Bottom, b.Bottom);
+            int w = Math.Min(a.Right, b.Right) - x;
+            int h = Math.Min(a.Bottom, b.Bottom) - y;
 
             return new Rectangle(x, y, w, h);
         }
+
+
+        public override string ToString()
+        {
+            return string.Format("{{X:{0} Y:{1}, Width:{2}, Height:{3}}}", X, Y, Width, Height);
+        }
+
+        public bool Equals(Rectangle other)
+        {
+            return (X == other.X && Y == other.Y && Width == other.Width && Height == other.Height);
+        }
+
+        #region Operators
+
+        public static bool operator ==(Rectangle a, Rectangle b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Rectangle a, Rectangle b)
+        {
+            return !a.Equals(b);
+        }
+
+        #endregion
+            
     }
 }

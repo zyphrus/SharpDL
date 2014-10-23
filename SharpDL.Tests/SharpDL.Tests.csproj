@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7889194F-D4D9-4020-97B2-75D301D3B8DE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SharpDL.Tests</RootNamespace>
+    <AssemblyName>SharpDL.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\RectangleTest.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Graphics\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpDL.Events\SharpDL.Events.Mono.csproj">
+      <Project>{CBAC74B4-D9CD-4E22-AFC8-C9553423A6C5}</Project>
+      <Name>SharpDL.Events.Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpDL.Graphics\SharpDL.Graphics.Mono.csproj">
+      <Project>{DA5E47BC-F509-40F5-9FC7-9C94D1D70809}</Project>
+      <Name>SharpDL.Graphics.Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpDL.Input\SharpDL.Input.Mono.csproj">
+      <Project>{91EBB67F-91DC-4721-A62E-02B39F821062}</Project>
+      <Name>SharpDL.Input.Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpDL\SharpDL.Mono.csproj">
+      <Project>{65A37BD8-0987-4E05-A48A-CF59E4DE3F41}</Project>
+      <Name>SharpDL.Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpDL.Shared\SharpDL.Shared.csproj">
+      <Project>{02E40AF5-4608-4A26-9B4A-27EECE8AEA61}</Project>
+      <Name>SharpDL.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

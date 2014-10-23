@@ -124,53 +124,76 @@ namespace SharpDL.Graphics
                 , (source != null ? source.Value.Height : texture.Height), angle, center);
         }
 
-        public void RenderPoint(Point point)
+        public void RenderPoint(Point point, Color color)
         {
-            RenderPoint(point.X, point.Y);
+            RenderPoint(point.X, point.Y, color);
         }
 
-        public void RenderPoint(int x, int y)
+        public void RenderPoint(int x, int y, Color color)
         {
             ThrowExceptionIfRendererIsNull();
 
+            var oldColor = GetDrawColor();
+            SetDrawColor(color);
             int result = SDL.SDL_RenderDrawPoint(Handle, x, y);
+            SetDrawColor(oldColor);
             if (Utilities.IsError(result))
             {
                 throw new InvalidOperationException(); //TODO: Proper error
             }
         }
 
-        public void RenderRect(Rectangle rect)
+        public void RenderRect(Rectangle rect, Color color)
         {
             ThrowExceptionIfRendererIsNull();
 
             var sdlRect = rect.ToSDLRect();
+            var oldColor = GetDrawColor();
+            SetDrawColor(color);
             int result = SDL.SDL_RenderDrawRect(Handle, ref sdlRect);
+            SetDrawColor(oldColor);
             if (Utilities.IsError(result))
             {
                 throw new InvalidOperationException(); //TODO: Proper error
             }
         }
 
-        public void RenderRect(int x, int y, int w, int h)
+        public void RenderRect(int x, int y, int w, int h, Color color)
         {
-            RenderRect(new Rectangle(x, y, w, h));
+            RenderRect(new Rectangle(x, y, w, h), color);
         }
 
-        public void RenderLine(Point a, Point b)
+        public void RenderLine(Point a, Point b, Color color)
         {
-            RenderLine(a.X, a.Y, b.X, b.Y);
+            RenderLine(a.X, a.Y, b.X, b.Y, color);
         }
 
-        public void RenderLine(int x1, int y1, int x2, int y2)
+        public void RenderLine(Vector a, Vector b, Color color)
+        {
+            RenderLine((int)a.X, (int)a.Y, (int)b.X, (int)b.Y, color);
+        }
+
+        /// <summary>
+        /// Renders the line.
+        /// </summary>
+        /// <param name="x1">The first x value.</param>
+        /// <param name="y1">The first y value.</param>
+        /// <param name="x2">The second x value.</param>
+        /// <param name="y2">The second y value.</param>
+        /// <param name="color">Color to be rendered</param>
+        /// <remarks>Renderer's color only changes during draw, returns to old color after</remarks>
+        public void RenderLine(int x1, int y1, int x2, int y2, Color color)
         {
             ThrowExceptionIfRendererIsNull();
-
+            var oldColor = GetDrawColor();
+            SetDrawColor(color);
             int result = SDL.SDL_RenderDrawLine(Handle, x1, y1, x2, y2);
+            SetDrawColor(oldColor);
             if (Utilities.IsError(result))
             {
                 throw new InvalidOperationException(); //TODO: Proper error
             }
+
         }
 
         public void RenderPresent()
@@ -183,6 +206,13 @@ namespace SharpDL.Graphics
         #endregion
 
         #region Settings
+
+        public Color GetDrawColor()
+        {
+            byte r, g, b, a;
+            SDL.SDL_GetRenderDrawColor(Handle, out r, out g, out b, out a);
+            return new Color(r, g, b, a);
+        }
 
         public void ResetRenderTarget()
         {

@@ -10,12 +10,24 @@ namespace SharpDL.Graphics
 
         public byte B { get; private set; }
 
+        public byte A { get; private set; }
+
         public Color(byte red, byte green, byte blue)
             : this()
         {
             R = red;
             G = green;
             B = blue;
+            A = 255;
+        }
+
+        public Color(byte red, byte green, byte blue, byte alpha)
+            : this()
+        {
+            R = red;
+            G = green;
+            B = blue;
+            A = alpha;
         }
 
         public Color(string colorCode)
