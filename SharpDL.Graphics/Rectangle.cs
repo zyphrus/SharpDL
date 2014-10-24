@@ -132,6 +132,14 @@ namespace SharpDL.Graphics
             return new Vector(depthX, depthY);
         }
 
+        public void Inflate(int width, int height)
+        {
+            X -= width / 2;
+            Y -= height / 2;
+            Width += width / 2;
+            Height += height / 2;
+        }
+
         public static Rectangle Union(Rectangle rect1, Rectangle rect2)
         {
             int x = Math.Min(rect1.X, rect2.X);
@@ -157,6 +165,7 @@ namespace SharpDL.Graphics
             return new Rectangle(x, y, w, h);
         }
 
+        #region Operators
 
         public override string ToString()
         {
@@ -168,7 +177,15 @@ namespace SharpDL.Graphics
             return (X == other.X && Y == other.Y && Width == other.Width && Height == other.Height);
         }
 
-        #region Operators
+        public override bool Equals(object obj)
+        {
+            return (obj is Rectangle) && ((Rectangle)(obj) == this);
+        }
+
+        public override int GetHashCode()
+        {
+            return X ^ Y ^ Width ^ Height;
+        }
 
         public static bool operator ==(Rectangle a, Rectangle b)
         {

@@ -35,7 +35,7 @@ namespace SharpDL.Graphics
             {
                 Handle = SDL.SDL_LoadBMP(FilePath);
             }
-            else if (surfaceType == SurfaceType.PNG)
+            else if (surfaceType == SurfaceType.PNG || surfaceType == SurfaceType.JPG)
             {
                 Handle = SDL_image.IMG_Load(FilePath);
             }

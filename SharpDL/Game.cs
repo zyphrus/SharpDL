@@ -163,7 +163,7 @@ namespace SharpDL
 
             while (!IsExiting)
             {
-                SDL.SDL_Event rawEvent = new SDL.SDL_Event();
+                SDL.SDL_Event rawEvent;
                 while (SDL.SDL_PollEvent(out rawEvent) == 1)
                     RaiseGameEventFromRawEvent(rawEvent);
 
@@ -245,9 +245,9 @@ namespace SharpDL
                      || rawEvent.type == SDL.SDL_EventType.SDL_KEYUP)
             {
                 KeyboardEventArgs eventArgs = GameEventArgsFactory<KeyboardEventArgs>.Create(rawEvent);
-                if (eventArgs.State == KeyState.Pressed)
+                if (eventArgs.State == SharpDL.Events.KeyState.Pressed)
                     RaiseEvent<KeyboardEventArgs>(KeyPressed, eventArgs);
-                else if (eventArgs.State == KeyState.Released)
+                else if (eventArgs.State == SharpDL.Events.KeyState.Released)
                     RaiseEvent<KeyboardEventArgs>(KeyReleased, eventArgs);
             }
             else if (rawEvent.type == SDL.SDL_EventType.SDL_TEXTEDITING)
